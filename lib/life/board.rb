@@ -7,9 +7,9 @@ module Life
       @generation = 0
       @columns    = []
       
-      (0..width).each do |x|
+      (0..width-1).each do |x|
         column = []
-        (0..height).each do |y|
+        (0..height-1).each do |y|
           column << Cell.new(x,y,self)
         end
         @columns << column
@@ -30,14 +30,14 @@ module Life
     end
     
     def render!
-      @height.each do |y|
-        @width.each do |x|
+      (0..@height-1).each do |y|
+        (0..@width-1).each do |x|
           print(@columns[x][y].alive? ? '@' : ' ')
         end
         print "\n"
       end
       
-      puts "generation ##{}"
+      print "generation ##{@generation.to_s}"
     end
     
     def each_cell(&block)
@@ -46,6 +46,23 @@ module Life
           yield cell
         end
       end
+    end
+    
+    # return an array of the cells that are neighbours to the given cell
+    # so, for cell = Cell(3,5)
+    def neighbours(cell)
+      xmin = (cell.y-1).at_least(0)      # 4
+      xmax = (cell.y+1).at_most(width)   # 6
+      
+      ymin = (cell.x-1).at_least(0)      # 2
+      ymax = (cell.x+1).at_most(height)  # 4
+      
+      ret = @columns[xmin..xmax].map{|col| col[ymin..ymax]}.flatten - [cell]
+      if ret.any?(&:nil?)
+        #require 'ruby-debug'; debugger
+        puts cell.inspect
+      end
+      ret
     end
     
   end

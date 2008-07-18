@@ -14,6 +14,18 @@ class Array
   def random!
     self.delete_at(Kernel.rand(length))
   end
+  
+  # def count(obj = nil, &block)
+  #   puts obj.inspect
+  #   puts block.inspect
+  #   if obj.nil?
+  #     self.size
+  #   elsif obj
+  #     self.select{|i| i == obj}.size
+  #   elsif block_given?
+  #     collect{|e| yield e}
+  #   end
+  # end
 end
 
 class Numeric

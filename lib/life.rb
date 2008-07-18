@@ -11,16 +11,18 @@ module Life
     def start!
       reset! unless @@board
       clear!
+      @@board.render!
+      
       1000.times do
         @@board.calculate!
         clear!
         @@board.render!
-        wait!s
+        wait!
       end
     end
     
     def reset!
-      @@board = Board.new(15,15)
+      @@board = Board.new(30,15)
     end
     
     def clear!
