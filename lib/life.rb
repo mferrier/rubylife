@@ -22,15 +22,15 @@ module Life
     end
     
     def reset!
-      @@board = Board.new(30,15)
+      @@board = Board.new(100,40)
     end
     
     def clear!
-      puts "\n" * 30
+      puts "\n"*20
     end
     
     def wait!
-      sleep 0.1
+      sleep 0.05
     end
   end
 end

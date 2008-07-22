@@ -30,5 +30,9 @@ module Life
       @neighbours ||= @board.neighbours(self)
     end
     
+    def inspect
+      "Cell(#{x},#{y})"
+    end
+    
   end
 end

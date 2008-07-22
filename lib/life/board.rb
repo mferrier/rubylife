@@ -51,18 +51,13 @@ module Life
     # return an array of the cells that are neighbours to the given cell
     # so, for cell = Cell(3,5)
     def neighbours(cell)
-      xmin = (cell.y-1).at_least(0)      # 4
-      xmax = (cell.y+1).at_most(width)   # 6
+      ymin = (cell.y-1).at_least(0)      # 4
+      ymax = (cell.y+1).at_most(height)   # 6
       
-      ymin = (cell.x-1).at_least(0)      # 2
-      ymax = (cell.x+1).at_most(height)  # 4
+      xmin = (cell.x-1).at_least(0)      # 2
+      xmax = (cell.x+1).at_most(width)  # 4
       
-      ret = @columns[xmin..xmax].map{|col| col[ymin..ymax]}.flatten - [cell]
-      if ret.any?(&:nil?)
-        #require 'ruby-debug'; debugger
-        puts cell.inspect
-      end
-      ret
+      @columns[xmin..xmax].map{|col| col[ymin..ymax]}.flatten - [cell]
     end
     
   end
