@@ -19,9 +19,8 @@ module Life
       @@board         = Board.new(100,40)
       
       @@screen        = Rubygame::Screen.new([board.width*CELL_WIDTH, board.height*CELL_HEIGHT])
-      @@screen.title  = "Conway's Game of Life"
       @@queue         = Rubygame::EventQueue.new
-      @@clock         = Rubygame::Clock.new { |clock| clock.target_framerate = 30 }
+      @@clock         = Rubygame::Clock.new {|clock| clock.target_framerate = 30 }
       @@background    = Rubygame::Surface.new(screen.size)
       
       background.fill([0,0,0])
