@@ -10,9 +10,10 @@ module Life
   
   class << self
     def start!
+      Rubygame.init()
+      
       @@board         = Board.new(100,40)
       
-      Rubygame.init()
       @@screen        = Rubygame::Screen.new([board.width*7, board.height*7])
       @@screen.title  = "Conway's Game of Life"
       @@queue         = Rubygame::EventQueue.new
