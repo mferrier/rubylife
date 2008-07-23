@@ -41,14 +41,13 @@ module Life
     end
     
     def each_cell(&block)
-      @columns.each do |column|
-        column.each do |cell|
-          yield cell
-        end
-      end
+      @columns.flatten.each{|cell| yield cell}
     end
     
     # return an array of the cells that are neighbours to the given cell
+    # cells only call this once and remember who their neighbours are from
+    # then on
+    # 
     # so, for cell = Cell(3,5)
     def neighbours(cell)
       ymin = (cell.y-1).at_least(0)      # 4
