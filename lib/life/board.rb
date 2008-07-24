@@ -14,6 +14,9 @@ module Life
         end
         @columns << column
       end
+      
+      # preload neighbours
+      each_cell(&:neighbours)
     end
     
     def calculate!(evolve = true)
@@ -29,17 +32,6 @@ module Life
       end
     end
     
-    def render!
-      (0..@height-1).each do |y|
-        (0..@width-1).each do |x|
-          print(@columns[x][y].alive? ? '@' : ' ')
-        end
-        print "\n"
-      end
-      
-      print "generation ##{@generation.to_s}"
-    end
-    
     def each_cell(&block)
       @columns.flatten.each{|cell| yield cell}
     end
@@ -48,15 +40,25 @@ module Life
     # cells only call this once and remember who their neighbours are from
     # then on
     # 
-    # so, for cell = Cell(3,5)
+    # cell neighbours wrap at the edges of the screen, too
     def neighbours(cell)
-      ymin = (cell.y-1).at_least(0)      # 4
-      ymax = (cell.y+1).at_most(height)   # 6
+      x1 = (cell.x-1 < 0 ? width-1 : cell.x-1)
+      x2 = cell.x
+      x3 = (cell.x+1 > width-1 ? 0 : cell.x+1)
       
-      xmin = (cell.x-1).at_least(0)      # 2
-      xmax = (cell.x+1).at_most(width)  # 4
+      y1 = (cell.y-1 < 0 ? height-1 : cell.y-1)
+      y2 = cell.y
+      y3 = (cell.y+1 > height-1 ? 0 : cell.y+1)
       
-      @columns[xmin..xmax].map{|col| col[ymin..ymax]}.flatten - [cell]
+      ([x1, x2, x3].map do |x|
+        [y1, y2, y3].map do |y|
+          @columns[x][y]
+        end
+      end).flatten - [cell]
+    end
+    
+    def cell_at(x,y)
+      @columns[x][y]
     end
     
   end

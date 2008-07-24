@@ -7,16 +7,18 @@ require 'lib/life/cell'
 
 module Life
   mattr_reader :board, :background, :screen, :queue, :clock
-  COLOR_ALIVE = [255,255,255].freeze
-  COLOR_DEAD  = [0,0,0].freeze
-  CELL_WIDTH  = 7
-  CELL_HEIGHT = 7
+  BOARD_WIDTH  = 100
+  BOARD_HEIGHT = 100
+  COLOR_ALIVE  = [255,255,255].freeze
+  COLOR_DEAD   = [0,0,0].freeze
+  CELL_WIDTH   = 7
+  CELL_HEIGHT  = 7
   
   class << self
     def start!
       Rubygame.init()
       
-      @@board         = Board.new(100,40)
+      @@board         = Board.new(BOARD_WIDTH, BOARD_HEIGHT)
       
       @@screen        = Rubygame::Screen.new([board.width*CELL_WIDTH, board.height*CELL_HEIGHT])
       @@queue         = Rubygame::EventQueue.new
@@ -56,8 +58,9 @@ module Life
         end # event handling
       end # main loop
       puts "terminated!"
-      Rubygame.quit()
       
+    ensure
+      Rubygame.quit()
     end # start!()
     
     def render_board!

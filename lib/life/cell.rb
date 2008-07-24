@@ -9,7 +9,7 @@ module Life
     end
 
     def calculate!
-      alives = neighbours.select{|c| c.alive?}.size
+      alives = neighbours.select{|c| c.alive?}.size rescue (require 'ruby-debug'; debugger)
       
       if alive?
         if alives < 2 || alives > 3
