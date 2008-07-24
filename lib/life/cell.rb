@@ -4,16 +4,19 @@ module Life
     alias_method :alive?, :state
 
     # conway
-    # STAY_ALIVE = [2,3]
-    # BIRTH      = [3]
+    STAY_ALIVE = [2,3]
+    BIRTH      = [3]
 
-    # mikeway
-    STAY_ALIVE = [2,4,6,8]
-    BIRTH      = [3,5,8]
-
+    # liquid-y
+    # STAY_ALIVE = [2,4,6,8]
+    # BIRTH      = [3,5,8]
+    
+    # STAY_ALIVE = [3,4]
+    # BIRTH      = [2]
+        
     def initialize(x,y,board)
       @x, @y, @board = x, y, board
-      @state = @next_state = (rand(2) == 1) # randomly on or off, more likely to be off
+      @state = @next_state = false
       @needs_update = true
       @changed_last_gen = true
     end
@@ -48,6 +51,11 @@ module Life
     
     def inspect
       "Cell(#{x},#{y})"
+    end
+    
+    def state=(s)
+      @changed_last_gen = true
+      @state = @next_state = s
     end
     
   end

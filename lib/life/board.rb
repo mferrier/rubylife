@@ -19,6 +19,14 @@ module Life
       each_cell(&:neighbours)
     end
     
+    def clear!
+      each_cell{|c| c.state = false}
+    end
+    
+    def scramble!
+      each_cell{|c| c.state = (rand(2) == 1)}
+    end
+    
     def calculate!(evolve = true)
       each_cell do |cell|
         cell.calculate!
@@ -55,10 +63,6 @@ module Life
           @columns[x][y]
         end
       end).flatten - [cell]
-    end
-    
-    def cell_at(x,y)
-      @columns[x][y]
     end
     
   end
