@@ -7,8 +7,8 @@ require 'lib/life/cell'
 
 module Life
   mattr_reader :board, :background, :screen, :queue, :clock
-  BOARD_WIDTH  = 100
-  BOARD_HEIGHT = 100
+  BOARD_WIDTH  = 20
+  BOARD_HEIGHT = 20
   COLOR_ALIVE  = [255,255,255].freeze
   COLOR_DEAD   = [0,0,0].freeze
   CELL_WIDTH   = 7
