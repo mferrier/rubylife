@@ -7,8 +7,8 @@ require 'lib/life/cell'
 
 module Life
   mattr_reader :board, :background, :screen, :queue, :clock
-  BOARD_WIDTH  = 20
-  BOARD_HEIGHT = 20
+  BOARD_WIDTH  = 100
+  BOARD_HEIGHT = 40
   COLOR_ALIVE  = [255,255,255].freeze
   COLOR_DEAD   = [0,0,0].freeze
   CELL_WIDTH   = 7
@@ -65,6 +65,8 @@ module Life
     
     def render_board!
       board.each_cell do |cell|
+        next unless cell.changed_last_gen
+        
         color   = (cell.alive? ? COLOR_ALIVE : COLOR_DEAD)
         x1  = cell.x*CELL_WIDTH
         y1  = cell.y*CELL_HEIGHT
