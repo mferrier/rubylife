@@ -8,12 +8,12 @@ module Life
     # BIRTH      = [3]
 
     # mikeway
-    STAY_ALIVE = [2,3]
-    BIRTH      = [3,6]
+    STAY_ALIVE = [2,4,6,8]
+    BIRTH      = [3,5,8]
 
     def initialize(x,y,board)
       @x, @y, @board = x, y, board
-      @state = @next_state = (rand(5) == 1) # randomly on or off, more likely to be off
+      @state = @next_state = (rand(2) == 1) # randomly on or off, more likely to be off
       @needs_update = true
       @changed_last_gen = true
     end

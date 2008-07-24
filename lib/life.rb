@@ -18,7 +18,7 @@ module Life
     def start!
       Rubygame.init()
       
-      @@board         = Board.new(BOARD_WIDTH, BOARD_HEIGHT)
+      reset_board!
       
       @@screen        = Rubygame::Screen.new([board.width*CELL_WIDTH, board.height*CELL_HEIGHT])
       @@queue         = Rubygame::EventQueue.new
@@ -47,6 +47,8 @@ module Life
             case event.key 
             when Rubygame::K_ESCAPE
               quit = true
+            when ?r || ?R
+              reset_board!
             end
           # when Rubygame::MouseMotionEvent
           #   quit = true
@@ -62,6 +64,10 @@ module Life
     ensure
       Rubygame.quit()
     end # start!()
+    
+    def reset_board!
+      @@board = Board.new(BOARD_WIDTH, BOARD_HEIGHT)
+    end
     
     def render_board!
       board.each_cell do |cell|
@@ -80,3 +86,5 @@ module Life
   end # class methods
   
 end
+
+Life.start!
