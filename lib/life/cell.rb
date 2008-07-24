@@ -4,12 +4,12 @@ module Life
     alias_method :alive?, :state
 
     # conway
-    STAY_ALIVE = [2,3]
-    BIRTH      = [3]
+    # STAY_ALIVE = [2,3]
+    # BIRTH      = [3]
 
     # mikeway
-    # STAY_ALIVE = [3, 6]
-    # BIRTH      = [6]
+    STAY_ALIVE = [2,3]
+    BIRTH      = [3,6]
 
     def initialize(x,y,board)
       @x, @y, @board = x, y, board
