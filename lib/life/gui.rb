@@ -10,7 +10,7 @@ module Life
     MENU_HEIGHT = 25
     MENU_COLOR  = [50,0,0]
     
-    mattr_reader :background, :menu, :screen, :queue, :clock, :initialized, :buttons, :font
+    mattr_reader :background, :menu, :screen, :queue, :clock, :initialized, :buttons, :font, :last_cell_clicked
     alias_method :initialized?, :initialized
     
     class << self
@@ -65,13 +65,16 @@ module Life
                 return
               end
             when Rubygame::MouseMotionEvent
-              #puts "mouse motion!"
+              if event.buttons.include?(1) && (cell = cell_at(board, *event.pos)) && cell != @@last_cell_clicked
+                @@last_cell_clicked = cell
+                cell.state = !cell.state
+              end
             when Rubygame::MouseDownEvent
               #
             when Rubygame::MouseUpEvent
               if button = @@buttons.detect{|b| b.clicked?(*event.pos)}
                 button.clicked!
-              elsif cell = cell_clicked?(board, *event.pos)
+              elsif cell = cell_at(board, *event.pos)
                 cell_clicked!(cell)
               end
             end
@@ -106,7 +109,8 @@ module Life
         clock.tick()
       end
       
-      def cell_clicked?(board,x,y)
+      # returns the cell at pos x,y, or nil if there is no cell there
+      def cell_at(board,x,y)
         # make sure it isn't a menu click
         return false unless x > 0 && y > MENU_HEIGHT
         

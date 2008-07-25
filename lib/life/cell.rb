@@ -58,5 +58,10 @@ module Life
       @state = s
     end
     
+    def clear!
+      @changed_last_gen = true
+      @state = @next_state = false
+    end
+    
   end
 end

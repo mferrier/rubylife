@@ -20,7 +20,7 @@ module Life
     end
     
     def clear!
-      each_cell{|c| c.state = false}
+      each_cell{|c| c.clear!}
     end
     
     def scramble!
