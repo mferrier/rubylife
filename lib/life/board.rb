@@ -21,6 +21,7 @@ module Life
     
     def clear!
       each_cell{|c| c.clear!}
+      @generation = 0
     end
     
     def scramble!

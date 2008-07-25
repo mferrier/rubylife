@@ -16,7 +16,8 @@ module Life
   
   class << self
     def start!
-      GUI.event_loop(board)
+      GUI.board = @@board
+      GUI.event_loop
     end # start!()
 
   end # class methods
