@@ -10,7 +10,8 @@ module Life
     MENU_HEIGHT = 25
     MENU_COLOR  = [50,0,0]
     
-    mattr_reader :background, :menu, :screen, :queue, :clock, :initialized, :buttons, :font, :last_cell_clicked
+    mattr_reader  :background, :menu, :screen, :queue, :clock, :initialized, 
+                  :buttons, :font, :last_cell_clicked, :paused, :quit
     alias_method :initialized?, :initialized
     
     class << self
@@ -27,47 +28,51 @@ module Life
         @@background    = Rubygame::Surface.new([screen.width, screen.height-MENU_HEIGHT])
         @@background.fill(COLOR_DEAD)
         
-        clear_button    = Button.new("Clear",0,0) { board.clear! }
-        scramble_button = Button.new("Scramble",Button::DEFAULT_WIDTH, 0) { board.scramble! }
-        start_button    = Button.new("Start",Button::DEFAULT_WIDTH*2, 0) { puts "start not implemented" }
-        stop_button     = Button.new("Stop",Button::DEFAULT_WIDTH*3, 0) { puts "stop not implemented" }
-        quit_button     = Button.new("Quit",Button::DEFAULT_WIDTH*4, 0) { puts "quit not implemented" }
+        @@buttons = [] <<
+          Button.new("Clear",0,0) { board.clear! } <<
+          Button.new("Scramble",Button::DEFAULT_WIDTH, 0) { board.scramble! } <<
+          Button.new("Start",Button::DEFAULT_WIDTH*2, 0) { @@paused = false } <<
+          Button.new("Stop",Button::DEFAULT_WIDTH*3, 0) { @@paused = true } <<
+          Button.new("Quit",Button::DEFAULT_WIDTH*4, 0) { @@quit = true }
         
-        @@buttons = [] << clear_button << scramble_button << start_button << stop_button << quit_button
         @@buttons.each{|b| b.blit(@@menu) }
         @@screen.update
+        @@paused = true
         @@initialized   = true
       end
       
       def event_loop(board)
         init(board) unless initialized
         
-        quit = false
+        paused = false
       
         loop do
+          return if @@quit
           render_board(board)
           update_screen()
-          board.calculate!
+          board.calculate! unless @@paused
           
           queue.each do |event|
             case(event)
             when Rubygame::QuitEvent
-              return
+              @@quit = true
             when Rubygame::KeyDownEvent
               case event.key 
               when Rubygame::K_ESCAPE
-                return
+                @@quit = true
               when ?s || ?S
                 board.scramble!
               when ?c || ?C
                 board.clear!
               when ?q || ?Q
-                return
+                @@quit = true
+              when ?p || ?P
+                 @@paused = !@@paused
               end
             when Rubygame::MouseMotionEvent
               if event.buttons.include?(1) && (cell = cell_at(board, *event.pos)) && cell != @@last_cell_clicked
                 @@last_cell_clicked = cell
-                cell.state = !cell.state
+                cell.state = true
               end
             when Rubygame::MouseDownEvent
               #
@@ -84,6 +89,12 @@ module Life
         puts "terminating!"
         Rubygame.quit()
       end # event_loop
+      
+      def mouse_moved(event)
+      end
+      
+      def mouse_clicked(event)
+      end
       
       def render_board(board)
         board.each_cell do |cell|
@@ -104,7 +115,7 @@ module Life
       def update_screen
         menu.blit(screen, [0,0])
         background.blit(screen, [0,MENU_HEIGHT])
-        screen.title = "Cellular Automata (#{clock.framerate.round} fps)"
+        screen.title = (@@paused ? "* PAUSED * " : '') + "Cellular Automata (#{clock.framerate.round} fps)"
         screen.update()
         clock.tick()
       end

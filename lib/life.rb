@@ -16,7 +16,6 @@ module Life
   
   class << self
     def start!
-      board.scramble!
       GUI.event_loop(board)
     end # start!()
 
