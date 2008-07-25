@@ -1,11 +1,12 @@
 module Life
   class Board
-    attr_reader :width, :height, :generation, :columns
+    attr_reader :width, :height, :generation, :columns, :saved_columns
     
     def initialize(width, height)
       @width, @height = width, height
       @generation = 0
-      @columns    = []
+      @columns = []
+      @saved_columns = []
       
       (0..width-1).each do |x|
         column = []
@@ -59,11 +60,21 @@ module Life
       y2 = cell.y
       y3 = (cell.y+1 > height-1 ? 0 : cell.y+1)
       
+      #@columns.values_at(x1,x2,x3).map{|c| c.values_at(y1,y2,y3)}.flatten - [cell]
+      
       ([x1, x2, x3].map do |x|
         [y1, y2, y3].map do |y|
           @columns[x][y]
         end
       end).flatten - [cell]
+    end
+    
+    def save!
+      @saved_columns.replace Marshal.load(Marshal.dump(@columns))
+    end
+    
+    def revert!
+      @columns.replace Marshal.load(Marshal.dump(@saved_columns))
     end
     
   end

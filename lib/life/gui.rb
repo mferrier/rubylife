@@ -33,7 +33,9 @@ module Life
           Button.new("Scramble",Button::DEFAULT_WIDTH, 0) { board.scramble! } <<
           Button.new("Start",Button::DEFAULT_WIDTH*2, 0) { @@paused = false } <<
           Button.new("Stop",Button::DEFAULT_WIDTH*3, 0) { @@paused = true } <<
-          Button.new("Quit",Button::DEFAULT_WIDTH*4, 0) { @@quit = true }
+          Button.new("Save",Button::DEFAULT_WIDTH*4, 0) { board.save! } <<
+          Button.new("Load",Button::DEFAULT_WIDTH*5, 0) { board.revert!; render_board(); update_screen() } <<
+          Button.new("Quit",Button::DEFAULT_WIDTH*6, 0) { @@quit = true }
         
         @@buttons.each{|b| b.blit(@@menu) }
         @@screen.update
@@ -65,14 +67,8 @@ module Life
               case event.key 
               when Rubygame::K_ESCAPE
                 @@quit = true
-              when ?s || ?S
-                board.scramble!
-              when ?c || ?C
-                board.clear!
               when ?q || ?Q
                 @@quit = true
-              when ?p || ?P
-                 @@paused = !@@paused
               end
             when Rubygame::MouseMotionEvent
               mouse_dragged(event) if event.buttons.include?(1)
