@@ -31,9 +31,9 @@ module Life
         scramble_button = Button.new("Scramble",Button::DEFAULT_WIDTH, 0) { board.scramble! }
         start_button    = Button.new("Start",Button::DEFAULT_WIDTH*2, 0) { puts "start not implemented" }
         stop_button     = Button.new("Stop",Button::DEFAULT_WIDTH*3, 0) { puts "stop not implemented" }
-        quit_button     = Button.new("Quit",Button::DEFAULT_WIDTH*3, 0) { puts "quit not implemented" }
+        quit_button     = Button.new("Quit",Button::DEFAULT_WIDTH*4, 0) { puts "quit not implemented" }
         
-        @@buttons = [] << clear_button << scramble_button << start_button << stop_button
+        @@buttons = [] << clear_button << scramble_button << start_button << stop_button << quit_button
         @@buttons.each{|b| b.blit(@@menu) }
         @@screen.update
         @@initialized   = true
@@ -48,8 +48,6 @@ module Life
           render_board(board)
           update_screen()
           board.calculate!
-          
-          #quit = false
           
           queue.each do |event|
             case(event)
@@ -73,9 +71,7 @@ module Life
             when Rubygame::MouseUpEvent
               if button = @@buttons.detect{|b| b.clicked?(*event.pos)}
                 button.clicked!
-              end
-              
-              if cell = cell_clicked?(*event.pos)
+              elsif cell = cell_clicked?(board, *event.pos)
                 cell_clicked!(cell)
               end
             end
@@ -110,11 +106,18 @@ module Life
         clock.tick()
       end
       
-      def cell_clicked?(x,y)
+      def cell_clicked?(board,x,y)
+        # make sure it isn't a menu click
+        return false unless x > 0 && y > MENU_HEIGHT
+        
+        cell_x = x / CELL_WIDTH
+        cell_y = (y-MENU_HEIGHT) / CELL_HEIGHT
+        
+        board.columns[cell_x][cell_y]
       end
       
       def cell_clicked!(cell)
-        puts "cell got clicked: #{cell.inspect}"
+        cell.state = true
       end
       
     end # class methods

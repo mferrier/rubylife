@@ -55,7 +55,7 @@ module Life
     
     def state=(s)
       @changed_last_gen = true
-      @state = @next_state = s
+      @state = s
     end
     
   end
