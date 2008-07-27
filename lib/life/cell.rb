@@ -16,22 +16,26 @@ module Life
         
     def initialize(x,y,board)
       @x, @y, @board = x, y, board
-      @state = @next_state = false
-      @needs_update = true
+      @state = false
+      @next_state = false
       @changed_last_gen = true
     end
     
-    def calculate!
-      return unless neighbours.any?{|c| c.changed_last_gen}
+    def calculate!(debug=false)
+      return unless neighbours.any?{|c| c.changed_last_gen} || self.changed_last_gen
       alives = neighbours.select{|c| c.alive?}.size
       
       if alive?
         if !STAY_ALIVE.include?(alives)
           @next_state = false
+        else
+          @next_state = true
         end
       else
         if BIRTH.include?(alives)
           @next_state = true
+        else
+          @next_state = false
         end
       end
     end
@@ -60,7 +64,7 @@ module Life
     
     def clear!
       @changed_last_gen = true
-      @state = @next_state = false
+      @state = false
     end
     
   end

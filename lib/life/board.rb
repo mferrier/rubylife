@@ -42,8 +42,16 @@ module Life
       end
     end
     
+    def cells
+      @columns.flatten
+    end
+    
+    def cell_at(x,y)
+      @columns[x][y]
+    end
+    
     def each_cell(&block)
-      @columns.flatten.each{|cell| yield cell}
+      cells.each{|cell| yield cell}
     end
     
     # return an array of the cells that are neighbours to the given cell

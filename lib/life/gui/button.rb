@@ -2,7 +2,7 @@ module Life
   module GUI
     class Button
       
-      DEFAULT_WIDTH   = 100
+      DEFAULT_WIDTH   = 80
       DEFAULT_HEIGHT  = 20
       COLOR_BUTTON    = [0,80,0]
       COLOR_LABEL     = [25,255,255]

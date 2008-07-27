@@ -35,7 +35,8 @@ module Life
           Button.new("Stop",Button::DEFAULT_WIDTH*3, 0) { @@paused = true } <<
           Button.new("Save",Button::DEFAULT_WIDTH*4, 0) { board.save! } <<
           Button.new("Load",Button::DEFAULT_WIDTH*5, 0) { board.revert!; render_board(); update_screen() } <<
-          Button.new("Quit",Button::DEFAULT_WIDTH*6, 0) { @@quit = true }
+          Button.new("Debug",Button::DEFAULT_WIDTH*6, 0) { require 'ruby-debug'; debugger } <<
+          Button.new("Quit",Button::DEFAULT_WIDTH*7, 0) { @@quit = true }
         
         @@buttons.each{|b| b.blit(@@menu) }
         @@screen.update
