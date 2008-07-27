@@ -62,6 +62,10 @@ module Life
       @state = s
     end
     
+    def changed_last_gen=(b)
+      @changed_last_gen = b
+    end
+    
     def clear!
       @changed_last_gen = true
       @state = false

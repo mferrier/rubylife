@@ -83,6 +83,7 @@ module Life
     
     def revert!
       @columns.replace Marshal.load(Marshal.dump(@saved_columns))
+      each_cell{|c| c.changed_last_gen = true }
     end
     
   end
