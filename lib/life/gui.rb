@@ -11,7 +11,7 @@ module Life
     MENU_COLOR  = [50,0,0]
     
     mattr_reader  :board, :background, :menu, :screen, :queue, :clock, :initialized, 
-                  :buttons, :font, :last_painted_cell, :paused, :quit, :drawing
+                  :buttons, :font, :last_painted_cell, :paused, :quit, :stepping
     alias_method :initialized?, :initialized
     
     class << self
@@ -29,19 +29,20 @@ module Life
         @@background.fill(COLOR_DEAD)
         
         @@buttons = [] <<
-          Button.new("Clear",0,0) { board.clear! } <<
-          Button.new("Scramble",Button::DEFAULT_WIDTH, 0) { board.scramble! } <<
-          Button.new("Start",Button::DEFAULT_WIDTH*2, 0) { @@paused = false } <<
-          Button.new("Stop",Button::DEFAULT_WIDTH*3, 0) { @@paused = true } <<
-          Button.new("Save",Button::DEFAULT_WIDTH*4, 0) { board.save! } <<
-          Button.new("Load",Button::DEFAULT_WIDTH*5, 0) { board.revert!; render_board(); update_screen() } <<
-          Button.new("Debug",Button::DEFAULT_WIDTH*6, 0) { require 'ruby-debug'; debugger } <<
-          Button.new("Quit",Button::DEFAULT_WIDTH*7, 0) { @@quit = true }
+          Button.new("Start",     Button::DEFAULT_WIDTH*0,  0) { @@paused = false } <<
+          Button.new("Stop",      Button::DEFAULT_WIDTH*1,  0) { @@paused = true } <<
+          Button.new("Step",      Button::DEFAULT_WIDTH*2,  0) { @@paused = false; @@stepping = true } <<
+          Button.new("Save",      Button::DEFAULT_WIDTH*3,  0) { board.save! } <<
+          Button.new("Load",      Button::DEFAULT_WIDTH*4,  0) { board.revert!; render_board(); update_screen() } <<
+          Button.new("Clear",     Button::DEFAULT_WIDTH*5,  0) { @@paused = true; board.clear! } <<
+          Button.new("Scramble",  Button::DEFAULT_WIDTH*6,  0) { board.scramble! } <<
+          Button.new("Quit",      Button::DEFAULT_WIDTH*7,  0) { @@quit = true }
+          #Button.new("Debug",Button::DEFAULT_WIDTH*6, 0) { require 'ruby-debug'; debugger } <<
         
         @@buttons.each{|b| b.blit(@@menu) }
         @@screen.update
         @@paused = true
-        @@drawing = true
+        @@stepping = false
         @@initialized   = true
       end
       
@@ -52,13 +53,16 @@ module Life
       def event_loop
         init() unless initialized
         
-        paused = false
-      
         loop do
           return if @@quit
           render_board()
           update_screen()
           board.calculate! unless @@paused
+          
+          if @@stepping
+            @@paused = true
+            @@stepping = false
+          end
           
           queue.each do |event|
             case(event)
