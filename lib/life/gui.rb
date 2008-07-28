@@ -87,8 +87,8 @@ module Life
           end # queue
         end # main loop
       ensure
-        puts "terminating!"
         Rubygame.quit()
+        Kernel.exit()
       end # event_loop
       
       def mouse_dragged(event)
