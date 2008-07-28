@@ -5,6 +5,7 @@ require 'lib/core_extensions'
 require 'lib/life/board'
 require 'lib/life/cell'
 require 'lib/life/gui'
+require 'lib/life/parser'
 
 module Life
   
