@@ -7,6 +7,10 @@ module Life
     STAY_ALIVE = [2,3]
     BIRTH      = [3]
 
+    # highlife
+    # STAY_ALIVE = [2,3]
+    # BIRTH      = [3,6]
+        
     # slow decay
     # STAY_ALIVE = [2,4,6,8]
     # BIRTH      = [3,5,8]
