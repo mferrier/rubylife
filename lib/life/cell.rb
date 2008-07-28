@@ -7,10 +7,11 @@ module Life
     STAY_ALIVE = [2,3]
     BIRTH      = [3]
 
-    # liquid-y
+    # slow decay
     # STAY_ALIVE = [2,4,6,8]
     # BIRTH      = [3,5,8]
     
+    # super expansion
     # STAY_ALIVE = [3,4]
     # BIRTH      = [2]
         
@@ -21,7 +22,7 @@ module Life
       @changed_last_gen = true
     end
     
-    def calculate!(debug=false)
+    def calculate!
       return unless neighbours.any?{|c| c.changed_last_gen} || self.changed_last_gen
       alives = neighbours.select{|c| c.alive?}.size
       
