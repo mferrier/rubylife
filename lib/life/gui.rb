@@ -121,7 +121,8 @@ module Life
         x2    = x1 + (CELL_WIDTH-1)
         y2    = y1 + (CELL_HEIGHT-1)
         
-        background.draw_box_s([x1,y1], [x2,y2], color)        
+        # subtract one from x2 and y2 for cell borders
+        background.draw_box_s([x1,y1], [x2-1,y2-1], color)        
       end
       
       def update_screen
