@@ -17,6 +17,7 @@ module Life
     class << self
       
       def init
+        @@board = Life.board
         @@screen        = Rubygame::Screen.new([board.width*CELL_WIDTH, (board.height*CELL_HEIGHT)+MENU_HEIGHT])
         
         @@queue         = Rubygame::EventQueue.new
@@ -37,17 +38,13 @@ module Life
           Button.new("Clear",     Button::DEFAULT_WIDTH*5,  0) { pause!; board.clear!; render_board_and_update() } <<
           Button.new("Scramble",  Button::DEFAULT_WIDTH*6,  0) { board.scramble! } <<
           Button.new("Quit",      Button::DEFAULT_WIDTH*7,  0) { @@quit = true }
-          #Button.new("Debug",Button::DEFAULT_WIDTH*6, 0) { require 'ruby-debug'; debugger } <<
+          #Button.new("Test",      Button::DEFAULT_WIDTH*8,  0) { Life::Parser.open_and_load('test.life') }
         
         @@buttons.each{|b| b.blit(@@menu) }
         @@screen.update
-        pause!
         @@stepping = false
+        pause!
         @@initialized   = true
-      end
-      
-      def board=(b)
-        @@board = b
       end
       
       def event_loop

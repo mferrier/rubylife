@@ -9,7 +9,7 @@ module Life
       end
 
       def lines
-        @lines ||= @contents.select{|l| l =~ /^[\.\*]+$/}.map{|l| Parser::Line.new(l)}
+        @lines ||= @contents.select{|l| l =~ /^[\.\*]+$/}.map{|l| Line.new(l)}
       end
       
       def starting_coords_line
@@ -26,6 +26,10 @@ module Life
         
         def initialize(content)
           @content = content
+        end
+        
+        def cells
+          @cells ||= content.split(//).map{|c| c == '*' ? true : false}
         end
       end
     end
