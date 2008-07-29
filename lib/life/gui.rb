@@ -29,19 +29,19 @@ module Life
         @@background.fill(COLOR_DEAD)
         
         @@buttons = [] <<
-          Button.new("Start",     Button::DEFAULT_WIDTH*0,  0) { @@paused = false } <<
-          Button.new("Stop",      Button::DEFAULT_WIDTH*1,  0) { @@paused = true } <<
-          Button.new("Step",      Button::DEFAULT_WIDTH*2,  0) { @@paused = false; @@stepping = true } <<
+          Button.new("Start",     Button::DEFAULT_WIDTH*0,  0) { unpause! } <<
+          Button.new("Stop",      Button::DEFAULT_WIDTH*1,  0) { pause! } <<
+          Button.new("Step",      Button::DEFAULT_WIDTH*2,  0) { unpause!; @@stepping = true } <<
           Button.new("Save",      Button::DEFAULT_WIDTH*3,  0) { board.save! } <<
-          Button.new("Load",      Button::DEFAULT_WIDTH*4,  0) { board.revert!; render_board(); update_screen() } <<
-          Button.new("Clear",     Button::DEFAULT_WIDTH*5,  0) { @@paused = true; board.clear! } <<
+          Button.new("Load",      Button::DEFAULT_WIDTH*4,  0) { board.revert!; render_board_and_update() } <<
+          Button.new("Clear",     Button::DEFAULT_WIDTH*5,  0) { pause!; board.clear!; render_board_and_update() } <<
           Button.new("Scramble",  Button::DEFAULT_WIDTH*6,  0) { board.scramble! } <<
           Button.new("Quit",      Button::DEFAULT_WIDTH*7,  0) { @@quit = true }
           #Button.new("Debug",Button::DEFAULT_WIDTH*6, 0) { require 'ruby-debug'; debugger } <<
         
         @@buttons.each{|b| b.blit(@@menu) }
         @@screen.update
-        @@paused = true
+        pause!
         @@stepping = false
         @@initialized   = true
       end
@@ -55,12 +55,11 @@ module Life
         
         loop do
           return if @@quit
-          render_board()
-          update_screen()
+          render_board_and_update()
           board.calculate! unless @@paused
           
           if @@stepping
-            @@paused = true
+            pause!
             @@stepping = false
           end
           
@@ -150,6 +149,19 @@ module Life
         cell_y = (y-MENU_HEIGHT) / CELL_HEIGHT
         
         board.columns[cell_x][cell_y]
+      end
+      
+      def pause!
+        @@paused = true
+      end
+      
+      def unpause!
+        @@paused = false
+      end
+      
+      def render_board_and_update
+        render_board()
+        update_screen()
       end
       
     end # class methods

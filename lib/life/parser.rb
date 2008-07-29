@@ -1,5 +1,4 @@
 require 'lib/life/parser/life_file'
-require 'lib/life/parser/line'
 
 module Life
   module Parser

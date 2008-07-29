@@ -20,6 +20,14 @@ module Life
         raise "no starting coords found in file '#{@filename}'" unless starting_coords_line
         @starting_coords ||= starting_coords_line.scan(/^#P (\d) (\d)/).flatten
       end
+      
+      class Line
+        attr_reader :content
+        
+        def initialize(content)
+          @content = content
+        end
+      end
     end
   end
 end
